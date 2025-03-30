@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kviz s Animacijom</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f5f5dc; /* Bež boja */
+            overflow-x: hidden;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        button {
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        /* Animacija za malu sliku koja putuje lijevo i desno */
+        .moving-image {
+            position: absolute;
+            top: 20px; /* Razmak od vrha */
+            left: 0;
+            width: 100px; /* Širina slike */
+            animation: moveLeftRight 5s linear infinite; /* Animacija traje 5 sekundi, linearno, beskonačno se ponavlja */
+        }
+
+        .moving-image-bottom {
+            position: absolute;
+            bottom: 20px; /* Razmak od dna */
+            left: 0;
+            width: 100px;
+            animation: moveLeftRight 5s linear infinite;
+        }
+
+        /* Definicija animacije koja pomiče sliku lijevo-desno */
+        @keyframes moveLeftRight {
+            0% {
+                left: 0;
+            }
+            50% {
+                left: calc(100% - 100px); /* Pomakne sliku do desne strane */
+            }
+            100% {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Jednostavan Kviz</h2>
+
+    <!-- Slika koja putuje s vrha -->
+    <img src="photo.jpeg" alt="Animirana slika" class="moving-image">
+
+    <div class="question">
+        <p>Koji je glavni grad Hrvatske?</p>
+        <button onclick="checkAnswer(this, 'Zagreb')">Zagreb</button>
+        <button onclick="checkAnswer(this, 'Split')">Split</button>
+        <button onclick="checkAnswer(this, 'Rijeka')">Rijeka</button>
+    </div>
+
+    <!-- Slika koja putuje s dna -->
+    <img src="photo.jpeg" alt="Animirana slika" class="moving-image-bottom">
+
+    <script>
+        function checkAnswer(button, answer) {
+            if (answer === "Zagreb") {
+                button.style.backgroundColor = "lightgreen";
+                alert("Točno! ✅");
+            } else {
+                button.style.backgroundColor = "lightcoral";
+                alert("Netočno ❌");
+            }
+        }
+    </script>
+
+</body>
+</html>
