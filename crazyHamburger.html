@@ -62,27 +62,11 @@
     <!-- Slika koja putuje s vrha -->
     <img src="photo.jpeg" alt="Animirana slika" class="moving-image">
 
-    <div class="question">
-        <p>Koji je glavni grad Hrvatske?</p>
-        <button onclick="checkAnswer(this, 'Zagreb')">Zagreb</button>
-        <button onclick="checkAnswer(this, 'Split')">Split</button>
-        <button onclick="checkAnswer(this, 'Rijeka')">Rijeka</button>
-    </div>
-
+    
     <!-- Slika koja putuje s dna -->
-    <img src="photo.jpeg" alt="Animirana slika" class="moving-image-bottom">
+    <img src="photo.png" alt="Animirana slika" class="moving-image-bottom">
 
-    <script>
-        function checkAnswer(button, answer) {
-            if (answer === "Zagreb") {
-                button.style.backgroundColor = "lightgreen";
-                alert("Točno! ✅");
-            } else {
-                button.style.backgroundColor = "lightcoral";
-                alert("Netočno ❌");
-            }
-        }
-    </script>
+    
 
 </body>
 </html>
