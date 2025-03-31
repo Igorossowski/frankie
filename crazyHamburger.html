@@ -30,7 +30,7 @@
             top: 20px; /* Razmak od vrha */
             left: 0;
             width: 100px; /* Širina slike */
-            animation: moveLeftRight 5s linear infinite; /* Animacija traje 5 sekundi, linearno, beskonačno se ponavlja */
+            animation: moveRightLeft 20s linear infinite; /* Animacija traje 5 sekundi, linearno, beskonačno se ponavlja */
         }
 
         .moving-image-bottom {
@@ -38,7 +38,7 @@
             bottom: 20px; /* Razmak od dna */
             left: 0;
             width: 100px;
-            animation: moveLeftRight 5s linear infinite;
+            animation: moveLeftRight 20s linear infinite;
         }
 
         /* Definicija animacije koja pomiče sliku lijevo-desno */
@@ -53,6 +53,18 @@
                 left: 0;
             }
         }
+		@keyframes moveRightLeft {
+    0% {
+        left: calc(100% - 100px); /* Početak na desnoj strani */
+    }
+    50% {
+        left: 0; /* Pomakne se do lijeve strane */
+    }
+    100% {
+        left: calc(100% - 100px); /* Vrati se na desnu stranu */
+    }
+}
+
         .corner-message {
     position: fixed;
     bottom: 10px;  /* Udaljenost od dna */
@@ -61,7 +73,19 @@
     padding: 10px;
     border-radius: 5px;
     font-size: 14px;
+		/*guinea plzzzzzzzzzz*/
 }
+	    .hover-image {
+    position: fixed;
+    left: 20px;  /* Postavlja sliku blizu lijevog ruba */
+    top: 50%;    /* Postavlja gornji rub slike na sredinu ekrana */
+    transform: translateY(-50%); /* Pomakni sliku gore za pola visine da stvarno bude centrirana */
+    width: 100px; /* Prilagodi veličinu slike */
+    cursor: pointer;
+}
+
+	    
+	    
     </style>
 </head>
 <body>
