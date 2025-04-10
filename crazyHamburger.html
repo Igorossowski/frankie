@@ -1,328 +1,281 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O: nemoguće</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            background-color: #f5f5dc;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O: nemoguće</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f5f5dc;
+      overflow: hidden;
+      margin: 0;
+    }
 
-        #startScreen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+    #startScreen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
 
-        #motivacija {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #2f2f2f;
-        }
+    #startBtn {
+      padding: 15px 30px;
+      font-size: 18px;
+      background-color: #5f3ad7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
 
-        #startBtn {
-            padding: 15px 30px;
-            font-size: 18px;
-            background-color: #5f3ad7;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
+    .corner-message {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      color: black;
+      font-size: 14px;
+    }
 
-        .moving-image {
-            position: absolute;
-            top: 20px;
-            left: 0;
-            width: 100px;
-            animation: moveRightLeft 20s linear infinite;
-        }
+    .hover-image {
+      position: fixed;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100px;
+      cursor: pointer;
+    }
 
-        .moving-image-bottom {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            width: 100px;
-            animation: moveLeftRight 20s linear infinite;
-        }
+    .moving-image, .moving-image-bottom {
+      position: absolute;
+      width: 100px;
+      animation: moveLeftRight 20s linear infinite;
+    }
 
-        @keyframes moveLeftRight {
-            0% { left: 0; }
-            50% { left: calc(100% - 100px); }
-            100% { left: 0; }
-        }
+    .moving-image {
+      top: 20px;
+      left: 0;
+    }
 
-        @keyframes moveRightLeft {
-            0% { left: calc(100% - 100px); }
-            50% { left: 0; }
-            100% { left: calc(100% - 100px); }
-        }
+    .moving-image-bottom {
+      bottom: 20px;
+      left: 0;
+      animation: moveRightLeft 20s linear infinite;
+    }
 
-        .corner-message {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            color: black;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 14px;
-        }
+    @keyframes moveLeftRight {
+      0% { left: 0; }
+      50% { left: calc(100% - 100px); }
+      100% { left: 0; }
+    }
 
-        .hover-image {
-            position: fixed;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 100px;
-            cursor: pointer;
-        }
+    @keyframes moveRightLeft {
+      0% { left: calc(100% - 100px); }
+      50% { left: 0; }
+      100% { left: calc(100% - 100px); }
+    }
 
-        #gameCanvas {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-        }
+    #counter {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
 
-        #victoryScreen {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #f5f5dc;
-            z-index: 10;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
+    #confettiContainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 999;
+    }
 
-        #victoryText {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #333;
-        }
+    #confettiContainer img {
+      max-width: 100%;
+      height: auto;
+    }
 
-        .confetti {
-            position: absolute;
-            top: 0;
-            width: 150px;
-            height: auto;
-            z-index: 11;
-        }
-
-        #confettiLeft {
-            left: 0;
-        }
-
-        #confettiRight {
-            right: 0;
-        }
-
-        #hitCounter {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            font-weight: bold;
-            background: rgba(255, 255, 255, 0.7);
-            padding: 8px 12px;
-            border-radius: 8px;
-        }
-    </style>
+    #confettiText {
+      font-size: 32px;
+      margin-top: 20px;
+      color: #2c2c2c;
+    }
+  </style>
 </head>
 <body>
 
-    <div id="startScreen">
-        <h1 id="motivacija">Franceska, mi vjerujemo u tebe — rasturi ispite svojim ogromnim mozgom 🧠🚀</h1>
-        <button id="startBtn">POKRENI MOZAK</button>  
-    </div>
+  <div id="startScreen">
+    <h1>Franceska, mi vjerujemo u tebe,<br>rasturi ispite svojim ogromnim mozgom 💥</h1>
+    <button id="startBtn">Započni igru</button>
+  </div>
 
-    <img id="hoverImg" src="https://raw.githubusercontent.com/Igorossowski/frankie/main/Guinea.png" alt="Guinea Pig"
-        class="hover-image"
-        onmouseover="this.src='https://raw.githubusercontent.com/Igorossowski/frankie/main/DeadG1.png';"
-        onmouseout="this.src='https://raw.githubusercontent.com/Igorossowski/frankie/main/Guinea.png';">
+  <canvas id="gameCanvas" style="display: none;"></canvas>
 
-    <div class="corner-message"><b>Tvoj 2.0 dečko u 2025. godini 🔥🔥🔥🔥</b></div>
+  <img id="hoverImg" src="https://raw.githubusercontent.com/Igorossowski/frankie/main/Guinea.png"
+    class="hover-image"
+    onmouseover="this.src='https://raw.githubusercontent.com/Igorossowski/frankie/main/DeadG1.png';"
+    onmouseout="this.src='https://raw.githubusercontent.com/Igorossowski/frankie/main/Guinea.png';">
 
-    <img src="https://raw.githubusercontent.com/Igorossowski/frankie/main/photo.png" alt="Slika" class="moving-image">
-    <img src="https://raw.githubusercontent.com/Igorossowski/frankie/main/photo.png" alt="Animirana slika T_T" class="moving-image-bottom">
+  <div class="corner-message">Tvoj 2.0 dečko u 2025. godini 🔥🔥🔥🔥</div>
+  <img src="https://raw.githubusercontent.com/Igorossowski/frankie/main/photo.png" class="moving-image">
+  <img src="https://raw.githubusercontent.com/Igorossowski/frankie/main/photo.png" class="moving-image-bottom">
 
-    <canvas id="gameCanvas"></canvas>
+  <div id="counter">0/14</div>
 
-    <div id="hitCounter">0 / 14</div>
+  <div id="confettiContainer">
+    <img src="https://raw.githubusercontent.com/Igorossowski/frankie/main/konfeti1.gif" alt="Confetti">
+    <div id="confettiText">još jedna pobjeda za Francusku 😎</div>
+  </div>
 
-    <div id="victoryScreen" class="flex-center">
-        <img id="confettiLeft" class="confetti" src="https://raw.githubusercontent.com/Igorossowski/frankie/main/konfeti1.gif" alt="Confetti Left">
-        <div id="victoryText">još jedna pobjeda za Francusku 😎</div>
-        <img id="confettiRight" class="confetti" src="https://raw.githubusercontent.com/Igorossowski/frankie/main/konfeti1.gif" alt="Confetti Right">
-    </div>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+    const asteroidImages = [
+      "m1.png", "m2.png", "oop.png", "fiz.png",
+      "upro.png", "osnele.png", "linearna.png"
+    ].map(name => `https://raw.githubusercontent.com/Igorossowski/frankie/main/${name}`);
 
-        let animationId;
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    const playerImage = new Image();
+    playerImage.src = "https://raw.githubusercontent.com/Igorossowski/frankie/main/player.png";
 
-        const asteroidImages = [
-            "m1.png", "m2.png", "oop.png", "fiz.png", "upro.png", "osnele.png", "linearna.png"
-        ].map(img => "https://raw.githubusercontent.com/Igorossowski/frankie/main/" + img);
+    const brainImage = new Image();
+    brainImage.src = "https://raw.githubusercontent.com/Igorossowski/frankie/main/brain.png";
 
-        const playerImage = new Image();
-        playerImage.src = "https://raw.githubusercontent.com/Igorossowski/frankie/main/player.png";
-        const brainImage = new Image();
-        brainImage.src = "https://raw.githubusercontent.com/Igorossowski/frankie/main/brain.png";
+    class Player {
+      constructor() {
+        this.width = 100;
+        this.height = 100;
+        this.x = canvas.width / 2 - this.width / 2;
+        this.y = canvas.height - this.height - 20;
+        this.speed = 7;
+        this.bullets = [];
+      }
 
-        const hitCounter = document.getElementById("hitCounter");
+      draw() {
+        ctx.drawImage(playerImage, this.x, this.y, this.width, this.height);
+      }
 
-        class Player {
-            constructor() {
-                this.x = canvas.width / 2;
-                this.y = canvas.height - 100;
-                this.width = 100;
-                this.height = 100;
-                this.speed = 7;
-                this.bullets = [];
-                this.hitCount = 0;
+      move(dir) {
+        this.x += dir * this.speed;
+        this.x = Math.max(0, Math.min(this.x, canvas.width - this.width));
+      }
+
+      shoot() {
+        this.bullets.push({ x: this.x + this.width / 2, y: this.y });
+      }
+    }
+
+    class Asteroid {
+      constructor() {
+        const margin = 60;
+        this.x = Math.random() * (canvas.width - margin * 2) + margin;
+        this.y = -50;
+        this.size = Math.random() * 30 + 100;
+        this.speed = Math.random() * 3 + 1; // max ~4
+        this.image = new Image();
+        this.image.src = asteroidImages[Math.floor(Math.random() * asteroidImages.length)];
+      }
+
+      draw() {
+        ctx.drawImage(this.image, this.x - this.size / 2, this.y - this.size / 2, this.size, this.size);
+      }
+
+      update() {
+        this.y += this.speed;
+      }
+    }
+
+    const player = new Player();
+    const asteroids = [];
+    let keys = {};
+    let hits = 0;
+    let lastAsteroidTime = 0;
+    const asteroidCooldown = 800;
+
+    function gameLoop(timestamp) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      player.draw();
+
+      if (keys["ArrowLeft"]) player.move(-1);
+      if (keys["ArrowRight"]) player.move(1);
+
+      player.bullets.forEach((bullet, i) => {
+        bullet.y -= 6;
+        ctx.drawImage(brainImage, bullet.x - 10, bullet.y, 40, 40);
+
+        asteroids.forEach((asteroid, j) => {
+          if (
+            bullet.x > asteroid.x - asteroid.size / 2 &&
+            bullet.x < asteroid.x + asteroid.size / 2 &&
+            bullet.y > asteroid.y - asteroid.size / 2 &&
+            bullet.y < asteroid.y + asteroid.size / 2
+          ) {
+            player.bullets.splice(i, 1);
+            asteroids.splice(j, 1);
+            hits++;
+            document.getElementById("counter").textContent = `${hits}/14`;
+
+            if (hits >= 14) {
+              showVictoryScreen();
             }
-
-            draw() {
-                ctx.drawImage(playerImage, this.x, this.y, this.width, this.height);
-            }
-
-            move(dir) {
-                this.x += dir * this.speed;
-            }
-
-            shoot() {
-                this.bullets.push({ x: this.x + this.width / 2, y: this.y });
-            }
-
-            updateCounter() {
-                hitCounter.textContent = `${this.hitCount} / 14`;
-            }
-        }
-
-        class Asteroid {
-            constructor() {
-                this.x = Math.random() * (canvas.width - 200) + 100;
-                this.y = -20;
-                this.size = Math.random() * 30 + 100;
-                this.speed = Math.random() * 3 + 1;
-                this.image = new Image();
-                const randomImage = asteroidImages[Math.floor(Math.random() * asteroidImages.length)];
-                this.image.src = randomImage;
-            }
-
-            draw() {
-                ctx.drawImage(this.image, this.x - this.size / 2, this.y - this.size / 2, this.size, this.size);
-            }
-
-            update() {
-                this.y += this.speed;
-            }
-        }
-
-        const player = new Player();
-        const asteroids = [];
-        let keys = {};
-
-        function gameLoop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            player.draw();
-            player.updateCounter();
-
-            if (keys["ArrowLeft"] && player.x > 0) player.move(-1);
-            if (keys["ArrowRight"] && player.x < canvas.width - player.width) player.move(1);
-
-            player.bullets.forEach((bullet, i) => {
-                bullet.y -= 5;
-                ctx.drawImage(brainImage, bullet.x - 10, bullet.y, 40, 40);
-
-                asteroids.forEach((asteroid, j) => {
-                    if (
-                        bullet.x > asteroid.x - asteroid.size &&
-                        bullet.x < asteroid.x + asteroid.size &&
-                        bullet.y < asteroid.y + asteroid.size &&
-                        bullet.y > asteroid.y - asteroid.size
-                    ) {
-                        player.bullets.splice(i, 1);
-                        asteroids.splice(j, 1);
-                        player.hitCount++;
-                        player.updateCounter();
-                        if (player.hitCount >= 14) {
-                            showVictoryScreen();
-                        }
-                    }
-                });
-            });
-
-            asteroids.forEach((asteroid, i) => {
-                asteroid.update();
-                asteroid.draw();
-                if (asteroid.y > canvas.height) asteroids.splice(i, 1);
-            });
-
-            if (asteroids.length < 15 && Math.random() < 0.02) asteroids.push(new Asteroid());
-
-            animationId = requestAnimationFrame(gameLoop);
-        }
-
-        function showVictoryScreen() {
-            cancelAnimationFrame(animationId);
-            canvas.style.display = "none";
-            document.getElementById("victoryScreen").style.display = "flex";
-
-            setTimeout(() => {
-                endGame();
-            }, 5000);
-        }
-
-        function endGame() {
-            document.getElementById("victoryScreen").style.display = "none";
-            document.getElementById("hoverImg").style.display = "block";
-            document.querySelectorAll(".moving-image, .moving-image-bottom").forEach(img => img.style.display = "block");
-            document.getElementById("startBtn").style.display = "inline-block";
-            document.getElementById("startScreen").style.display = "flex";
-            player.hitCount = 0;
-            player.bullets = [];
-            asteroids.length = 0;
-            player.updateCounter();
-        }
-
-        window.addEventListener("keydown", (e) => {
-            keys[e.key] = true;
-            if (e.key === " ") player.shoot();
+          }
         });
+      });
 
-        window.addEventListener("keyup", (e) => {
-            keys[e.key] = false;
-        });
+      asteroids.forEach((asteroid, i) => {
+        asteroid.update();
+        asteroid.draw();
+        if (asteroid.y > canvas.height) asteroids.splice(i, 1);
+      });
 
-        document.getElementById("startBtn").addEventListener("click", () => {
-            document.getElementById("startBtn").style.display = "none";
-            document.getElementById("hoverImg").style.display = "none";
-            document.querySelectorAll(".moving-image, .moving-image-bottom").forEach(img => img.style.display = "none");
-            document.getElementById("startScreen").style.display = "none";
-            canvas.style.display = "block";
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            gameLoop();
-        });
-    </script>
+      if (timestamp - lastAsteroidTime > asteroidCooldown) {
+        if (Math.random() < 0.5 && asteroids.length < 20) {
+          asteroids.push(new Asteroid());
+          lastAsteroidTime = timestamp;
+        }
+      }
+
+      if (hits < 14) {
+        requestAnimationFrame(gameLoop);
+      }
+    }
+
+    function showVictoryScreen() {
+      document.getElementById("confettiContainer").style.display = "flex";
+      setTimeout(() => {
+        location.reload();
+      }, 5000);
+    }
+
+    window.addEventListener("keydown", (e) => {
+      keys[e.key] = true;
+      if (e.key === " ") player.shoot();
+    });
+
+    window.addEventListener("keyup", (e) => {
+      keys[e.key] = false;
+    });
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      document.getElementById("startScreen").style.display = "none";
+      document.getElementById("hoverImg").style.display = "none";
+      document.querySelectorAll(".moving-image, .moving-image-bottom").forEach(img => img.style.display = "none");
+      canvas.style.display = "block";
+      requestAnimationFrame(gameLoop);
+    });
+  </script>
 </body>
 </html>
