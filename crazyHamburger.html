@@ -19,15 +19,6 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
-      position: relative;
-    }
-
-    #graveImage {
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 120px;
     }
 
     #startBtn {
@@ -151,7 +142,6 @@
   <div id="startScreen">
     <h1>Franceska, mi vjerujemo u tebe,<br>rasturi ispite svojim ogromnim [MEGAMIND] mozgom 💥</h1>
     <button id="startBtn">UPOTRIJEBI SVOJ MOZAK</button>
-    <img id="graveImage" src="https://raw.githubusercontent.com/Igorossowski/frankie/main/grave.png" alt="Grave">
   </div>
 
   <canvas id="gameCanvas" style="display: none;"></canvas>
@@ -172,6 +162,7 @@
     <div id="confettiText">još jedna pobjeda za Francusku 😎</div>
   </div>
 
+  <!-- Mobilne kontrole -->
   <div id="mobileControls">
     <button class="mobile-btn" id="leftBtn">⬅</button>
     <button class="mobile-btn" id="shootBtn">🔥</button>
@@ -240,4 +231,89 @@
     }
 
     const player = new Player();
-    const
+    const asteroids = [];
+    let keys = {};
+    let hits = 0;
+    let lastAsteroidTime = 0;
+    const asteroidCooldown = 800;
+
+    function gameLoop(timestamp) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      player.draw();
+
+      if (keys["ArrowLeft"] || keys["left"]) player.move(-1);
+      if (keys["ArrowRight"] || keys["right"]) player.move(1);
+
+      player.bullets.forEach((bullet, i) => {
+        bullet.y -= 6;
+        ctx.drawImage(brainImage, bullet.x - 10, bullet.y, 40, 40);
+
+        asteroids.forEach((asteroid, j) => {
+          if (
+            bullet.x > asteroid.x - asteroid.size / 2 &&
+            bullet.x < asteroid.x + asteroid.size / 2 &&
+            bullet.y > asteroid.y - asteroid.size / 2 &&
+            bullet.y < asteroid.y + asteroid.size / 2
+          ) {
+            player.bullets.splice(i, 1);
+            asteroids.splice(j, 1);
+            hits++;
+            document.getElementById("counter").textContent = `${hits}/14`;
+
+            if (hits >= 14) {
+              showVictoryScreen();
+            }
+          }
+        });
+      });
+
+      asteroids.forEach((asteroid, i) => {
+        asteroid.update();
+        asteroid.draw();
+        if (asteroid.y > canvas.height) asteroids.splice(i, 1);
+      });
+
+      if (timestamp - lastAsteroidTime > asteroidCooldown) {
+        if (Math.random() < 0.5 && asteroids.length < 20) {
+          asteroids.push(new Asteroid());
+          lastAsteroidTime = timestamp;
+        }
+      }
+
+      if (hits < 14) requestAnimationFrame(gameLoop);
+    }
+
+    function showVictoryScreen() {
+      document.getElementById("confettiContainer").style.display = "flex";
+      setTimeout(() => location.reload(), 5000);
+    }
+
+    window.addEventListener("keydown", (e) => {
+      keys[e.key] = true;
+      if (e.key === " ") player.shoot();
+    });
+
+    window.addEventListener("keyup", (e) => {
+      keys[e.key] = false;
+    });
+
+    // Mobilni gumbi
+    document.getElementById("leftBtn").addEventListener("touchstart", () => keys["left"] = true);
+    document.getElementById("leftBtn").addEventListener("touchend", () => keys["left"] = false);
+
+    document.getElementById("rightBtn").addEventListener("touchstart", () => keys["right"] = true);
+    document.getElementById("rightBtn").addEventListener("touchend", () => keys["right"] = false);
+
+    document.getElementById("shootBtn").addEventListener("touchstart", () => player.shoot());
+
+    // Start igre
+    document.getElementById("startBtn").addEventListener("click", () => {
+      document.getElementById("startScreen").style.display = "none";
+      document.getElementById("hoverImg").style.display = "none";
+      document.querySelectorAll(".moving-image, .moving-image-bottom").forEach(img => img.style.display = "none");
+      canvas.style.display = "block";
+      requestAnimationFrame(gameLoop);
+    });
+  </script>
+</body>
+</html>
