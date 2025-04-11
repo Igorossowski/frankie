@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>O: nemoguće</title>
   <style>
     body {
@@ -30,6 +30,14 @@
       border-radius: 8px;
       cursor: pointer;
       margin-top: 20px;
+    }
+
+    #counter {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      font-size: 20px;
+      font-weight: bold;
     }
 
     .corner-message {
@@ -78,14 +86,6 @@
       100% { left: calc(100% - 100px); }
     }
 
-    #counter {
-      position: fixed;
-      top: 10px;
-      right: 20px;
-      font-size: 20px;
-      font-weight: bold;
-    }
-
     #confettiContainer {
       position: fixed;
       top: 0;
@@ -109,6 +109,31 @@
       font-size: 32px;
       margin-top: 20px;
       color: #2c2c2c;
+    }
+
+    #mobileControls {
+      display: none;
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      gap: 20px;
+      z-index: 10;
+    }
+
+    .mobile-btn {
+      background: #222;
+      color: white;
+      border: none;
+      padding: 15px 20px;
+      font-size: 20px;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 768px) {
+      #mobileControls {
+        display: flex;
+      }
     }
   </style>
 </head>
@@ -135,6 +160,13 @@
   <div id="confettiContainer">
     <img src="https://raw.githubusercontent.com/Igorossowski/frankie/main/konfeti1.gif" alt="Confetti">
     <div id="confettiText">još jedna pobjeda za Francusku 😎</div>
+  </div>
+
+  <!-- Mobilne kontrole -->
+  <div id="mobileControls">
+    <button class="mobile-btn" id="leftBtn">⬅</button>
+    <button class="mobile-btn" id="shootBtn">🔥</button>
+    <button class="mobile-btn" id="rightBtn">➡</button>
   </div>
 
   <script>
@@ -184,7 +216,7 @@
         this.x = Math.random() * (canvas.width - margin * 2) + margin;
         this.y = -50;
         this.size = Math.random() * 30 + 100;
-        this.speed = Math.random() * 3 + 1; // max ~4
+        this.speed = Math.random() * 3 + 1;
         this.image = new Image();
         this.image.src = asteroidImages[Math.floor(Math.random() * asteroidImages.length)];
       }
@@ -209,8 +241,8 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       player.draw();
 
-      if (keys["ArrowLeft"]) player.move(-1);
-      if (keys["ArrowRight"]) player.move(1);
+      if (keys["ArrowLeft"] || keys["left"]) player.move(-1);
+      if (keys["ArrowRight"] || keys["right"]) player.move(1);
 
       player.bullets.forEach((bullet, i) => {
         bullet.y -= 6;
@@ -248,16 +280,12 @@
         }
       }
 
-      if (hits < 14) {
-        requestAnimationFrame(gameLoop);
-      }
+      if (hits < 14) requestAnimationFrame(gameLoop);
     }
 
     function showVictoryScreen() {
       document.getElementById("confettiContainer").style.display = "flex";
-      setTimeout(() => {
-        location.reload();
-      }, 5000);
+      setTimeout(() => location.reload(), 5000);
     }
 
     window.addEventListener("keydown", (e) => {
@@ -269,6 +297,16 @@
       keys[e.key] = false;
     });
 
+    // Mobilni gumbi
+    document.getElementById("leftBtn").addEventListener("touchstart", () => keys["left"] = true);
+    document.getElementById("leftBtn").addEventListener("touchend", () => keys["left"] = false);
+
+    document.getElementById("rightBtn").addEventListener("touchstart", () => keys["right"] = true);
+    document.getElementById("rightBtn").addEventListener("touchend", () => keys["right"] = false);
+
+    document.getElementById("shootBtn").addEventListener("touchstart", () => player.shoot());
+
+    // Start igre
     document.getElementById("startBtn").addEventListener("click", () => {
       document.getElementById("startScreen").style.display = "none";
       document.getElementById("hoverImg").style.display = "none";
